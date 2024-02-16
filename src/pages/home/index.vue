@@ -1,5 +1,8 @@
 <template>
   <view>
+    <view class="search-box">
+      <mySearch @click="gotoSearch"></mySearch>
+    </view>
     <!-- 轮播图区域 -->
     <swiper
       :indicator-dots="true"
@@ -71,8 +74,10 @@
 </template>
 
 <script>
+import mySearch from '@/components/my-search/index.vue';
 import { showMsg } from "../../utils/showMsg";
 export default {
+  components: { mySearch },
   data() {
     return {
       swiperList: [],
@@ -101,6 +106,11 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    gotoSearch(){
+      uni.navigateTo({
+        url:'/subpkg/search/index'
+      })
     },
     getnavList() {
       this.$http
@@ -138,7 +148,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style scoped lang="scss">
 swiper {
   height: 330rpx;
   .swiper-item,
@@ -146,6 +156,11 @@ swiper {
     width: 100%;
     height: 100%;
   }
+}
+.search-box{
+  position: sticky;
+  top: 0;
+  z-index:999;
 }
 .nav-list {
   display: flex;
