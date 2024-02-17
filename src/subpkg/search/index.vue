@@ -27,15 +27,11 @@
       <!-- 标题区域 -->
       <view class="history-title">
         <text>搜索历史</text>
-        <uni-icons type="trash" size="17"></uni-icons>
+        <uni-icons type="trash" size="17" @click="cleanHistory"></uni-icons>
       </view>
       <!-- 列表区域 -->
       <view class="history-list">
-        <uni-tag
-          :text="item"
-          v-for="(item, i) in historyList"
-          :key="i"
-        ></uni-tag>
+        <uni-tag :text="item" v-for="(item, i) in histories" :key="i" @click="gotoGoodsList(item)"></uni-tag>
       </view>
     </view>
   </view>
@@ -51,10 +47,27 @@ export default {
       // 搜索关键词
       kw: "",
       searchResults: [],
-      historyList: ["a", "app", "apple"],
+      historyList: [],
     };
   },
+  computed: {
+    histories() {
+      return [...this.historyList].reverse();
+    },
+  },
+  onLoad() {
+    this.historyList = JSON.parse(uni.getStorageSync("kw") || "[]");
+  },
   methods: {
+    gotoGoodsList(item){
+      uni.navigateTo({
+        url:'/subpkg/goods_list/index?query='+item
+      })
+    },
+    cleanHistory(){
+      this.historyList = [];
+      uni.setStorageSync('kw', '[]');
+    },
     input(e) {
       clearTimeout(this.timer);
       // 重新启动一个延时器，并把 timerId 赋值给 this.timer
@@ -79,12 +92,20 @@ export default {
         .then(({ data }) => {
           if (data.meta.status !== 200) return showMsg();
           this.searchResults = data.message;
+          this.saveSearchList();
         });
     },
     gotoDetail(good_id) {
       uni.navigateTo({
         url: "/subpkg/goods_detail/index?goods_id" + good_id,
       });
+    },
+    saveSearchList() {
+      const set = new Set(this.historyList);
+      set.delete(this.kw);
+      set.add(this.kw);
+      this.historyList = Array.from(set);
+      uni.setStorageSync("kw", JSON.stringify(this.historyList));
     },
   },
 };
