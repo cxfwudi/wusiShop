@@ -1,9 +1,9 @@
 <template>
   <view>
     <view class="goods-list">
-      <block v-for="(goods, i) in goodsList" :key="i">
+      <view v-for="(goods, i) in goodsList" :key="i" @click="gotoDetail(goods)">
         <my-goods :goods="goods"></my-goods>
-      </block>
+      </view>
     </view>
   </view>
 </template>
@@ -35,6 +35,11 @@ export default {
     this.getGoodsList();
   },
   methods: {
+    gotoDetail(goods){
+      uni.navigateTo({
+        url:'/subpkg/goods_detail/index?goods_id=' + goods.goods_id
+      })
+    },
     getGoodsList(cb) {
       this.isLoading = true;
       this.$http

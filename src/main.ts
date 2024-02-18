@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import './uni.promisify.adaptor'
+import store from '@/store/index'
+
+
 declare global {  
   interface Uni {  
       $http:any
@@ -9,7 +12,9 @@ declare global {
 import Request from 'luch-request'
 const http = new Request()
 http.setConfig((config)=>{
-  config.baseURL='https://www.uinav.com'
+  // config.baseURL='https://www.uinav.com'
+  // https://api-hmugo-web.itheima.net/
+  config.baseURL='https://api-hmugo-web.itheima.net'
   return config;
 })
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
@@ -29,5 +34,8 @@ http.interceptors.response.use((response) => {
 Vue.prototype.$http = http
 Vue.config.productionTip = false
 
-const app = new (typeof App === 'function' ? App : Vue.extend(Object.assign({ mpType: 'app' }, App)))
+const app = new Vue({
+  ...App,
+  store
+})
 app.$mount();
