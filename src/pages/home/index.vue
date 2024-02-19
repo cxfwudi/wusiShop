@@ -76,7 +76,9 @@
 <script>
 import mySearch from '@/components/my-search/index.vue';
 import { showMsg } from "../../utils/showMsg";
+import badgeMix from '@/mixins/tabbar-badge';
 export default {
+  mixins:[badgeMix],
   components: { mySearch },
   data() {
     return {
