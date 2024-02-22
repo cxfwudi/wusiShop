@@ -52,6 +52,16 @@
         "appid": "wx91bd77fa4306b5da",
         "setting" : {
         	"urlCheck" : true
+        },
+        "requiredPrivateInfos": [
+            "getFuzzyLocation",
+            "choosePoi",
+            "chooseAddress"
+        ],
+        "permission": {
+            "scope.userLocation": {
+            "desc": "你的位置信息将用来进行接口调试"
+            }
         }
     },
     "mp-alipay" : {

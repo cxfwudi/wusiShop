@@ -24,6 +24,7 @@
           :min="1"
           :value="goods.goods_count"
           v-if="showNum"
+          @change="numChangeHandler"
         ></uni-number-box>
       </view>
     </view>
@@ -66,6 +67,13 @@ export default {
         goods_state: !this.goods.goods_state,
       });
     },
+    //监听uni-box的组件变化的事件
+    numChangeHandler(val) {
+      this.$emit("num-change", {
+        goods_id: this.goods.goods_id,
+        goods_count: +val,
+      });
+    },
   },
 };
 </script>
@@ -75,7 +83,10 @@ export default {
   display: flex;
   padding: 10px 5px;
   border-bottom: 1px solid #f0f0f0;
-
+  // 让 goods-item 项占满整个屏幕的宽度
+  width: 750rpx;
+  // 设置盒模型为 border-box
+  box-sizing: border-box;
   .goods-item-left {
     margin-right: 5px;
     display: flex;

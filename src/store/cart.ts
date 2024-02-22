@@ -20,8 +20,16 @@ export default {
       const findRes = state.cart.find((x:any)=>x.goods_id === goods.goods_id);
       if(findRes) findRes.goods_state = goods.goods_state;
       uni.setStorageSync('cart',JSON.stringify(state.cart));
+    },
+    updateGoodsCount(state:any,goods:any){
+      const findRes = state.cart.find((x:any)=>x.goods_id === goods.goods_id);
+      if(findRes) findRes.goods_count = goods.goods_count;
+      uni.setStorageSync('cart',JSON.stringify(state.cart));
+    },
+    removeGoodsById(state:any,goods_id:any){
+      state.cart = state.cart.filter((x:any)=>x.goods_id !== goods_id);
+      uni.setStorageSync('cart',JSON.stringify(state.cart));
     }
-     
   },
   
   getters:{
