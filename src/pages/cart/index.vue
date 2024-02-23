@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view class="cart-container" v-if="cart.length !== 0">
     <my-address></my-address>
     <!-- 购物车商品列表的标题区域 -->
     <view class="cart-title">
@@ -12,7 +12,10 @@
 
     <uni-swipe-action>
       <block v-for="(goods, i) in cart" :key="i">
-        <uni-swipe-action-item :right-options="options" @click="swiperClickHandler(goods)">
+        <uni-swipe-action-item
+          :right-options="options"
+          @click="swiperClickHandler(goods)"
+        >
           <my-goods
             :goods="goods"
             :showRadio="true"
@@ -23,6 +26,12 @@
         </uni-swipe-action-item>
       </block>
     </uni-swipe-action>
+
+    <my-settle></my-settle>
+  </view>
+  <view class="empty-cart" v-else>
+    <image src="/static/cart_empty@2x.png" class="empty-img"></image>
+    <text class="tip-text">空空如也~</text>
   </view>
 </template>
 
@@ -31,26 +40,33 @@ import { showMsg } from "../../utils/showMsg";
 import { mapGetters, mapState, mapMutations } from "vuex";
 import myGoods from "@/components/my-goods/index.vue";
 import myAddress from "@/components/my-address/index.vue";
+import mySettle from "@/components/my-settle/index.vue";
 import badgeMix from "@/mixins/tabbar-badge";
 export default {
-  data(){
+  data() {
     return {
-      options:[{
-        text:'删除',
-        style:{
-          backgroundColor:'#C00000'
-        }
-      }]
-    }
+      options: [
+        {
+          text: "删除",
+          style: {
+            backgroundColor: "#C00000",
+          },
+        },
+      ],
+    };
   },
   mixins: [badgeMix],
-  components: { myGoods,myAddress },
+  components: { myGoods, myAddress, mySettle },
   //从vuex中拿到
   computed: {
     ...mapState("m_cart", ["cart"]),
   },
   methods: {
-    ...mapMutations("m_cart", ["updateGoodsState", "updateGoodsCount","removeGoodsById"]),
+    ...mapMutations("m_cart", [
+      "updateGoodsState",
+      "updateGoodsCount",
+      "removeGoodsById",
+    ]),
     //e获取子组件传的数据
     radioChangeHandler(e) {
       this.updateGoodsState(e);
@@ -58,14 +74,17 @@ export default {
     numberChangeHandler(e) {
       this.updateGoodsCount(e);
     },
-    swiperClickHandler(goods){
+    swiperClickHandler(goods) {
       this.removeGoodsById(goods.goods_id);
-    }
+    },
   },
 };
 </script>
 
 <style lang="scss">
+.cart-container {
+  padding-bottom: 50px;
+}
 .cart-title {
   height: 40px;
   display: flex;
@@ -75,6 +94,23 @@ export default {
   border-bottom: 1px solid #efefef;
   .cart-title-text {
     margin-left: 10px;
+  }
+}
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 150px;
+
+  .empty-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .tip-text {
+    font-size: 12px;
+    color: gray;
+    margin-top: 15px;
   }
 }
 </style>

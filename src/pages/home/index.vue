@@ -95,11 +95,9 @@ export default {
   },
   methods: {
     async getSwiperList() {
-      console.log(1);
       this.$http
         .get("/api/public/v1/home/swiperdata")
         .then(({ data }) => {
-          console.log(data);
           if (data.meta.status != 200) return showMsg();
 
           this.swiperList = data.message;
@@ -135,7 +133,6 @@ export default {
         .get("/api/public/v1/home/floordata")
         .then(({ data }) => {
           if (data.meta.status !== 200) return showMsg();
-          console.log(data)
           data.message.forEach(floor => {
             floor.product_list.forEach(prod=>{
               prod.url = '../../subpkg/goods_list/index?' + prod.navigator_url.split('?')[1];
